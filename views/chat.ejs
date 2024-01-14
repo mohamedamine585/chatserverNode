@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<head>
+
+</head>
+<script>
+     document.addEventListener('DOMContentLoaded', () =>{
+    var chatMessages = document.getElementById('messages');
+    chatMessages.scrollTop = chatMessages.scrollHeight;})
+
+    const socket = new WebSocket("ws://localhost:8080/chat/<%= roomid %>");
+    socket.addEventListener('open',(event)=>{
+        console.log(socket.url)
+         console.log("Connection opened!")
+    })
+
+
+
+    socket.addEventListener('message',(event)=>{
+    const newmessage=document.createElement('div');
+    newmessage.textContent = event.data;
+    newmessage.id = 'message'
+         document.getElementById('messages').appendChild(
+          newmessage
+         )
+         scrollToBottom(); 
+
+    });
+    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight
+ 
+    function scrollToBottom() {
+  var chatMessages = document.getElementById('messages');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+      function sendmessage(){
+            const message = document.getElementById('messagetext');
+            console.log(message.value)
+            socket.send(message.value);
+            document.getElementById('messagetext').value ="";
+            document.getElementById('messagetext').focus()
+        }
+     
+
+</script>
+<body>
+    <style>
+        body{
+    display: flex;
+    
+    align-items: center;
+    flex-direction:column;
+    justify-content: center;
+}
+   input{
+
+    top: 100%;
+    width: 50vw;
+    height: 6vh;
+    border-radius: 10px 10px 10px;
+   }
+
+ 
+
+   button{
+    width: 90px;
+    height: 30px;
+    border-radius: 10px 10px 10px;
+    background-color:rgb(153, 250, 218);
+    font-weight: bold;
+   }
+   #messages{
+    clear: both;
+    overflow-y: auto; 
+    border: 2px solid;
+    height: 70vh;
+    width: 70vw;
+   }
+   #message{
+    width: fit-content;
+    min-width: 60vw;
+    min-height: 5vh;
+    border:2px solid;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-left: 5px;
+    border-radius: 5px;
+    white-space: normal;
+   }
+   #space1{
+        height: 20px;
+    }
+    #space0{
+    height: 20px;
+   }
+    </style>
+    
+
+<div id="messages" >
+    
+    <% messages.forEach(message => { %>
+        <div id="message"><%= message.text %></div>
+      <% }); %>
+</div>
+<div id="space0">
+
+</div>
+<div>
+    <input  type="text" placeholder="Type your message here" id="messagetext">
+</div>
+
+
+<div id="space1"></div>
+<div id="send">
+    <button onClick="sendmessage()"> Send  </button>
+
+</div>
+</body>

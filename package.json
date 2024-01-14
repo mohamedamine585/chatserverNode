@@ -1,0 +1,20 @@
+{
+  "name": "chatserver",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A chat server",
+  "main": "index.js",
+  "scripts": {
+    "start": " nodemon index.js"
+  },
+  "author": "Mohamed amine Tlili",
+  "license": "ISC",
+  "keywords": [],
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-ws": "^5.0.2",
+    "mongoose": "^8.0.4",
+    "ws": "^8.16.0"
+  }
+}
