@@ -24,7 +24,7 @@ export function broadcastMessageInRoom(message,roomid){
     }
 }
 
-wsRouter.ws('/:roomid',(ws,req,next)=>{
+wsRouter.ws('/chat/:roomid',(ws,req,next)=>{
     try {
 
         let roomid

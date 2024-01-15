@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "description": "A chat server",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": " nodemon index.js"
+    "start": " nodemon server.js"
   },
   "author": "Mohamed amine Tlili",
   "license": "ISC",
