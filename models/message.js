@@ -26,14 +26,14 @@ export   class MessageDataRepository {
          try {
            
           const messages = await  Message.find({group:groupid});
-           messages.sa
+      
           return messages;
          } catch (error) {
             console.log(error)
          }
        }
 
-        saveMessage(newMessage){
+       async saveMessage(newMessage){
         try {
         
               newMessage.save()

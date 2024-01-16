@@ -1,153 +1,166 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
 </head>
-<script>
-     function sendmessage(){
-           
-           const message = document.getElementById('messagetext');
-           socket.send(message.value);
-           document.getElementById('messagetext').value ="";
-           document.getElementById('messagetext').focus()
-       }
-     document.addEventListener('DOMContentLoaded', () =>{
-    var chatMessages = document.getElementById('messages');
-    chatMessages.scrollTop = chatMessages.scrollHeight;})
-
-    const socket = new WebSocket("ws://localhost:8080/chat/<%= roomid %>");
-    socket.addEventListener('open',(event)=>{
-        console.log(socket.url)
-         console.log("Connection opened!")
-    })
-
-     // Listening to messages  ******
-
-    socket.addEventListener('message',(event)=>{
-
-        // Parse Messages ****
-    const receivedmessages =  JSON.parse(event.data).msgs 
-    if(receivedmessages.length >= 2){
-      while(document.getElementById('message')!=null){
-        document.getElementById('message').remove()
-
-      }
-    }
-    let Onemessage ,deleteB,icon;
-
-    // Iterate through messages and render them ****
-    console.log(receivedmessages)
-     receivedmessages.forEach(rmsg => {
-
-        console.log(rmsg)
-          Onemessage = document.createElement('div');   
-         Onemessage.textContent = rmsg.text;
-         Onemessage.id = 'message'
-         Onemessage.setAttribute("message_id",rmsg._id);
-         deleteB = document.createElement('button');
-         deleteB.id = 'deleteB';
-         icon = document.createElement('i')
-         icon.className="fas fa-times"
-         deleteB.appendChild(icon)
-        
-         deleteB.addEventListener('click',async()=>{
-           await fetch(`http://localhost:8080/messages/${rmsg._id}`,{method:'DELETE'})
-         })
-         Onemessage.appendChild(deleteB)
-         document.getElementById('messages').appendChild(
-            Onemessage
-         )
-     });
-        
-         scrollToBottom(); 
-
-    });
- 
-    function scrollToBottom() {
-  var chatMessages = document.getElementById('messages');
-  chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-     
-     
-
-</script>
 <body>
     <style>
-        body{
-    display: flex;
-    
-    align-items: center;
-    flex-direction:column;
-    justify-content: center;
-}
-   input{
+         body {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
 
-    top: 100%;
-    width: 50vw;
-    height: 6vh;
-    border-radius: 10px 10px 10px;
-   } 
+        input {
+            width: 60vw;
+            height: 40px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
 
- 
+        #messages {
+            overflow-y: auto;
+            border: 2px solid #ddd;
+            height: 70vh;
+            width: 60vw;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
 
-   #b{
-    width: 90px;
-    height: 30px;
-    border-radius: 10px 10px 10px;
-    background-color:rgb(153, 250, 218);
-    font-weight: bold;
-   }
-   #deleteB{
-    background-color: white;
-    width: 2vw;
-    margin-left: 56vw;
-   }
-   #messages{
-    clear: both;
-    overflow-y: auto; 
-    border: 2px solid;
-    height: 70vh;
-    width: 70vw;
-   }
-   #message{
-    width: fit-content;
-    min-width: 60vw;
-    min-height: 5vh;
-    border:2px solid;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    padding-left: 5px;
-    border-radius: 5px;
-    white-space: normal;
-   }
-   #space1{
-        height: 20px;
-    }
-    #space0{
-    height: 20px;
-   }
+        .message {
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #deleteB {
+            background-color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        #deleteB i {
+            color: #ff5a5a;
+            font-size: 18px;
+        }
+
+        #space1, #space0 {
+            height: 10px;
+        }
+
+        #send button {
+            width: 80px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
     </style>
-    
 
-<div id="messages" >
-    
-    <% messages.forEach(message => { %>
-        <div id="message" message_id = "<% message._id %>"><%= message.text %></div>
-      <% }); %>
-</div>
-<div id="space0">
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            var chatMessages = document.getElementById('messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
 
-</div>
-<div>
-    <input  type="text" placeholder="Type your message here" id="messagetext">
-</div>
+        const socket = new WebSocket("ws://localhost:8080/chat/<%= roomid %>");
+        socket.addEventListener('open', (event) => {
+            console.log(socket.url);
+            console.log("Connection opened!");
+        });
 
+        socket.addEventListener('message', (event) => {
+            const receivedMessages = JSON.parse(event.data).msgs;
 
-<div id="space1"></div>
-<div id="send">
-    <button id="b" onClick="sendmessage()"> Send  </button>
+            if (receivedMessages.length >= 2) {
+                document.querySelectorAll('.message').forEach(msgElement => {
+                    msgElement.remove();
+                });
+            }
 
-</div>
+            receivedMessages.forEach(rmsg => {
+                const messageContainer = document.createElement('div');
+                messageContainer.className = 'message';
+                messageContainer.textContent = rmsg.text;
+                messageContainer.setAttribute('message_id', rmsg._id);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.id = 'deleteB';
+                deleteButton.innerHTML = '<i class="fas fa-times"></i>';
+
+                deleteButton.addEventListener('click',  () => {
+                     deleteMessage(rmsg._id);
+                    messageContainer.remove();
+                });
+
+                messageContainer.appendChild(deleteButton);
+                document.getElementById('messages').appendChild(messageContainer);
+            });
+
+            scrollToBottom();
+        });
+
+        async function deleteMessage(id) {
+            try {
+                await fetch(`http://localhost:8080/messages/${id}`, { method: 'DELETE' });
+            } catch (error) {
+                console.error('Error deleting message:', error);
+            }
+        }
+
+        function scrollToBottom() {
+            var chatMessages = document.getElementById('messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendmessage() {
+            const message = document.getElementById('messagetext');
+            socket.send(message.value);
+            document.getElementById('messagetext').value = "";
+            document.getElementById('messagetext').focus();
+        }
+    </script>
+
+    <div id="messages">
+        <% messages.forEach(message => { %>
+            <div class="message" message_id="<%= message._id %>">
+                <%= message.text %>
+                <button id="deleteB" onclick="deleteMessage('<%= message._id %>') && this.parentNode.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        <% }); %>
+    </div>
+
+    <div id="space0"></div>
+
+    <div>
+        <input type="text" placeholder="Type your message here" id="messagetext">
+    </div>
+
+    <div id="space1"></div>
+
+    <div id="send">
+        <button id="b" onclick="sendmessage()">Send</button>
+    </div>
 </body>
+</html>

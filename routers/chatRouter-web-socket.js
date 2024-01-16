@@ -1,6 +1,6 @@
 import express  from 'express'
 import expressWs from 'express-ws';
-import { broadcastMessageInRoom } from '../controllers/chatController.js';
+import ChatController from '../controllers/chatController.js';
 
 
 const app = express()
@@ -11,7 +11,7 @@ app.set('view engine', 'ejs');
 
 
 
-
+const ch = new  ChatController()
 wsRouter.ws('/chat/:roomid',(ws,req,next)=>{
     try {
 
@@ -30,7 +30,7 @@ wsRouter.ws('/chat/:roomid',(ws,req,next)=>{
                 throw Error()
           }
        
-         await broadcastMessageInRoom(msg,roomid)
+         await ch.broadcastMessageInRoom(msg,roomid)
    
          } catch (error) {
             console.log(error)

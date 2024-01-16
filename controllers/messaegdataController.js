@@ -1,24 +1,35 @@
 import {MessageDataRepository} from "../models/message.js"
-const Mr = new MessageDataRepository()
-export async  function saveMessage(msg){
-    try {
-        await Mr.saveMessage();
-    } catch (error) {
-        console.log(error)
-    }
-}
-export async  function fetchAll(roomid){
-    try {
-       return await Mr.fetchAll(roomid);
-    } catch (error) {
-        console.log(error)
-    }
-}
 
-export async function deleteMessage(messageid){
-    try {
-       Mr.deleteMessage(messageid)
-    } catch (error) {
-        console.log(error)
+
+export default class MessagesController{
+     Mr = new MessageDataRepository()
+
+     // ****** save in database 
+        saveMessage(msg){
+        try {
+             this.Mr.saveMessage();
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // ***** fetch from database *******
+     async   fetchAll(roomid){
+        try {
+           return await this.Mr.fetchAll(roomid);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+
+    // ****     delete database ********
+    
+     async  deleteMessage(messageid){
+        try {
+          this. Mr.deleteMessage(messageid)
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

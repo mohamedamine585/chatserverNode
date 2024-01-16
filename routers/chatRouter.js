@@ -1,16 +1,18 @@
 import express  from 'express'
-import { getChat } from '../controllers/roomsController.js';
-import { deleteMessage } from '../controllers/messaegdataController.js';
+import RoomsController from '../controllers/roomsController.js';
+import MessagesController from '../controllers/messaegdataController.js';
 
 const  ChatRouter= express.Router();
 
+const rc = new RoomsController()
+const mc = new MessagesController()
 ChatRouter.get('/',(req,res)=>{
    return res.status(404).end()
 })
 
 ChatRouter.delete('/messages/:messageid',async(req,res,next)=>{
    try {
-        deleteMessage(req.params.messageid)
+       mc.deleteMessage(req.params.messageid)
        
    } catch (error) {
     console.log(error)
@@ -21,7 +23,7 @@ ChatRouter.get('/chat/:roomid',async (req,res,next)=>{
         let roomid = req.params.roomid
             if(roomid >= 0){
 
-        const messages  = await getChat(roomid)
+        const messages  = await  rc.getChat(roomid)
         res.render('chat',{messages,roomid},)
     } 
     else{
