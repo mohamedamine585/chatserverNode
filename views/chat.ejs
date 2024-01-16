@@ -1,8 +1,16 @@
 <!DOCTYPE html>
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 </head>
 <script>
+     function sendmessage(){
+           
+           const message = document.getElementById('messagetext');
+           socket.send(message.value);
+           document.getElementById('messagetext').value ="";
+           document.getElementById('messagetext').focus()
+       }
      document.addEventListener('DOMContentLoaded', () =>{
     var chatMessages = document.getElementById('messages');
     chatMessages.scrollTop = chatMessages.scrollHeight;})
@@ -13,32 +21,54 @@
          console.log("Connection opened!")
     })
 
-
+     // Listening to messages  ******
 
     socket.addEventListener('message',(event)=>{
-    const newmessage=document.createElement('div');
-    newmessage.textContent = event.data;
-    newmessage.id = 'message'
+
+        // Parse Messages ****
+    const receivedmessages =  JSON.parse(event.data).msgs 
+    if(receivedmessages.length >= 2){
+      while(document.getElementById('message')!=null){
+        document.getElementById('message').remove()
+
+      }
+    }
+    let Onemessage ,deleteB,icon;
+
+    // Iterate through messages and render them ****
+    console.log(receivedmessages)
+     receivedmessages.forEach(rmsg => {
+
+        console.log(rmsg)
+          Onemessage = document.createElement('div');   
+         Onemessage.textContent = rmsg.text;
+         Onemessage.id = 'message'
+         Onemessage.setAttribute("message_id",rmsg._id);
+         deleteB = document.createElement('button');
+         deleteB.id = 'deleteB';
+         icon = document.createElement('i')
+         icon.className="fas fa-times"
+         deleteB.appendChild(icon)
+        
+         deleteB.addEventListener('click',async()=>{
+           await fetch(`http://localhost:8080/messages/${rmsg._id}`,{method:'DELETE'})
+         })
+         Onemessage.appendChild(deleteB)
          document.getElementById('messages').appendChild(
-          newmessage
+            Onemessage
          )
+     });
+        
          scrollToBottom(); 
 
     });
-    document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight
  
     function scrollToBottom() {
   var chatMessages = document.getElementById('messages');
   chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-      function sendmessage(){
-            const message = document.getElementById('messagetext');
-            console.log(message.value)
-            socket.send(message.value);
-            document.getElementById('messagetext').value ="";
-            document.getElementById('messagetext').focus()
-        }
+     
      
 
 </script>
@@ -57,16 +87,21 @@
     width: 50vw;
     height: 6vh;
     border-radius: 10px 10px 10px;
-   }
+   } 
 
  
 
-   button{
+   #b{
     width: 90px;
     height: 30px;
     border-radius: 10px 10px 10px;
     background-color:rgb(153, 250, 218);
     font-weight: bold;
+   }
+   #deleteB{
+    background-color: white;
+    width: 2vw;
+    margin-left: 56vw;
    }
    #messages{
     clear: both;
@@ -99,7 +134,7 @@
 <div id="messages" >
     
     <% messages.forEach(message => { %>
-        <div id="message"><%= message.text %></div>
+        <div id="message" message_id = "<% message._id %>"><%= message.text %></div>
       <% }); %>
 </div>
 <div id="space0">
@@ -112,7 +147,7 @@
 
 <div id="space1"></div>
 <div id="send">
-    <button onClick="sendmessage()"> Send  </button>
+    <button id="b" onClick="sendmessage()"> Send  </button>
 
 </div>
 </body>

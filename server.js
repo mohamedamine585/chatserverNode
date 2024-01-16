@@ -1,17 +1,14 @@
-import {PORT,HOST} from './utils.js'
-import express  from 'express'
-import expressWs from 'express-ws';
+import {PORT,HOST, intializingServer} from './utils.js'
+import {app,appws} from './config.js'
 import  ChatRouter  from './routers/chatRouter.js'
-import Mongodb from './models/database.js';
 import wsRouter from './routers/chatRouter-web-socket.js';
 
 
-const app = express();
-const {app:appws } = expressWs(app)
-app.set('view engine', 'ejs');
+
 
 // *** intializing mongoose ******
-await (new Mongodb()).initDB()
+await intializingServer();
+
 
 app.use('/',ChatRouter)
 appws.use('/',wsRouter)

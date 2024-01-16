@@ -1,4 +1,3 @@
-import { text } from 'express';
 import mongoose from 'mongoose'
 const MessageSchema = new mongoose.Schema({
 
@@ -19,38 +18,40 @@ const MessageSchema = new mongoose.Schema({
         type:Number
     }
 });
-const Message = mongoose.model('Message',MessageSchema,'messages')
+export const Message = mongoose.model('Message',MessageSchema,'messages')
 
-export default class MessageDataRepository {
+export   class MessageDataRepository {
    
        async  fetchAll(groupid) {
          try {
            
           const messages = await  Message.find({group:groupid});
+           messages.sa
           return messages;
          } catch (error) {
             console.log(error)
          }
        }
 
-       async saveMessage(message,sender,group){
+        saveMessage(newMessage){
         try {
-            let newMessage =new Message({
-                text:message,
-                sender:sender,
-                group:group,
-                sentAt:Date.now(),
+        
+              newMessage.save()
 
-
-            })
-
-             await newMessage.save()
-           
+       // make *usersInRoom* candidate for garbage collector
             newMessage = null;
         } catch (error) {
             console.log(error)
         }
+       
        }
+    async deleteMessage(messageid){
+        try {
+        await Message.findByIdAndDelete(new mongoose.Types.ObjectId(messageid))
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
  
