@@ -5,7 +5,7 @@ export default class MessagesController{
      Mr = new MessageDataRepository()
 
      // ****** save in database 
-        saveMessage(msg){
+       async  saveMessage(msg){
         try {
              this.Mr.saveMessage();
         } catch (error) {

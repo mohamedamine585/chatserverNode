@@ -30,7 +30,7 @@ wsRouter.ws('/chat/:roomid',(ws,req,next)=>{
                 throw Error()
           }
        
-         await ch.broadcastMessageInRoom(msg,roomid)
+         await ch.HandleMessage(msg,roomid)
    
          } catch (error) {
             console.log(error)

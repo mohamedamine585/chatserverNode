@@ -1,13 +1,14 @@
 import express  from 'express'
 import RoomsController from '../controllers/roomsController.js';
 import MessagesController from '../controllers/messaegdataController.js';
-
+import path, { dirname ,join} from 'path'
+import { fileURLToPath } from 'url';
 const  ChatRouter= express.Router();
 
 const rc = new RoomsController()
 const mc = new MessagesController()
 ChatRouter.get('/',(req,res)=>{
-   return res.status(404).end()
+   return res.sendFile(join(dirname(fileURLToPath(import.meta.url)),"../react-client/build",'index.html'))
 })
 
 ChatRouter.delete('/messages/:messageid',async(req,res,next)=>{
