@@ -2,23 +2,24 @@
             display: flex;
             align-items: center;
             flex-direction: column;
-            justify-content: center;
             background-color: #f4f4f4;
             margin: 0;
             font-family: Arial, sans-serif;
         }
 
         input {
+
             width: 60vw;
             height: 40px;
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 5px;
-            margin-bottom: 10px;
             font-size: 16px;
+
         }
 
         #messages {
+            margin-top: 5vh;
             overflow-y: auto;
             border: 2px solid #ddd;
             height: 70vh;
@@ -27,7 +28,6 @@
             box-sizing: border-box;
             background-color: #fff;
             border-radius: 10px;
-            margin-bottom: 10px;
         }
 
         .message {
@@ -40,6 +40,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        
         }
 
         #deleteB {
@@ -58,6 +59,7 @@
         }
 
         #send button {
+            margin-bottom: 50vh;
             width: 80px;
             height: 40px;
             border: none;
@@ -66,4 +68,25 @@
             color: #fff;
             cursor: pointer;
             font-size: 16px;
+        }
+        #metaMessage{
+            display: flex;
+            flex-direction: row;
+           
+            
+        }
+
+        #sender{
+            position: relative;
+            margin-left: 0.5vw;
+            color: grey
+            
+            
+        }
+        #messagecontainer{
+            flex: content;
+            flex-direction: row;
+        }
+        #timestamp{
+            margin-left: auto;
         }

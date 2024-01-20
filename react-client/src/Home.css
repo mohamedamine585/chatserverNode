@@ -1,0 +1,13 @@
+body{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+input{
+    margin-top: 30vh;
+    width: 50vw;
+}
+button{
+    width: 10vw;
+    height: 5vh;
+}

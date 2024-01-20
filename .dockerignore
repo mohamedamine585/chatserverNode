@@ -4,3 +4,5 @@ node_modules
 ./docerignore
 .git
 ./.gitignore
+react-client/node_modules
+react-client/src
